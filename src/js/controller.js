@@ -47,7 +47,7 @@ export default class Controller {
 
 		this.renderLine(context, linePoint, lineDirection);
 
-		const numCircles = 8;
+		const numCircles = 4;
 		for (let i = 0; i < numCircles; i++) {
 			const amt = i / numCircles;
 			this.renderCircleThing(context, 2 * Math.PI * amt, linePoint, lineDirection, );
