@@ -82,9 +82,10 @@ export default class Controller {
 			x: centerRadius * Math.cos(circleAngle),
 			y: centerRadius * Math.sin(circleAngle),
 		}
+		const circleRadius = (outerRadius - innerRadius) / 2;
 
 		context.beginPath();
-		context.arc(center.x, center.y, outerRadius - innerRadius, 0, 2 * Math.PI);
+		context.arc(center.x, center.y, circleRadius, 0, 2 * Math.PI);
 		context.stroke();
 	}
 }
