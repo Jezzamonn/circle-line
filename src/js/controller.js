@@ -1,3 +1,6 @@
+const outerRadius = 200;
+const innerRadius = 75;
+
 export default class Controller {
 
 	constructor() {
@@ -22,13 +25,38 @@ export default class Controller {
 	 */
 	render(context) {
 		context.beginPath();
-		context.fillStyle = 'black';
-		context.moveTo(0, 0);
-		context.arc(0, 0, 100, 0, 2 * Math.PI * this.animAmt);
-		context.fill();
 
-		context.scale(10, 10);
-		context.fillText(this.period * this.animAmt, 0, 0);
+		context.strokeStyle = 'white';
+
+		context.beginPath();
+		context.arc(0, 0, outerRadius, 0, 2 * Math.PI);
+		context.stroke();
+
+		context.beginPath();
+		context.arc(0, 0, innerRadius, 0, 2 * Math.PI);
+		context.stroke();
 	}
 
+}
+
+
+function dotProduct(v1, v2) {
+	return {
+		x: v1.x + v2.x,
+		y: v1.y + v2.y,
+	};
+}
+
+function addVecs(v1, v2) {
+	return {
+		x: v1.x + v2.x,
+		y: v1.y + v2.y,
+	}
+}
+
+function subVecs(v1, v2) {
+	return {
+		x: v1.x - v2.x,
+		y: v1.y - v2.y,
+	}
 }
