@@ -1,5 +1,5 @@
 const outerRadius = 200;
-const innerRadius = 0;
+const innerRadius = 100;
 
 export default class Controller {
 
@@ -47,7 +47,7 @@ export default class Controller {
 
 		this.renderLine(context, linePoint, lineDirection);
 
-		const numCircles = 4;
+		const numCircles = 8;
 		for (let i = 0; i < numCircles; i++) {
 			const amt = i / numCircles;
 			this.renderCircleThing(context, 2 * Math.PI * amt, linePoint, lineDirection, );
