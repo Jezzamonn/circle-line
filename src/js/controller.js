@@ -94,17 +94,18 @@ export default class Controller {
 		}
 		const circleRadius = (outerRadius - innerRadius) / 2;
 
-		// Also draw the places it crosses over?
-		const intersections = getCircleLineIntersections(center, circleRadius, linePoint, lineDirection);
-		if (intersections == null) {
-			return;
-		}
-		const [start, end] = intersections;
-
-		// :( expensive
-		const startAngle = Math.atan2(start.y - center.y, start.x - center.x);
-		const endAngle = Math.atan2(end.y - center.y, end.x - center.x);
 		context.lineStyle = 'white';
+		// Also draw the places it crosses over?
+		let startAngle = 0;
+		let endAngle = 2 * Math.PI;
+		const intersections = getCircleLineIntersections(center, circleRadius, linePoint, lineDirection);
+		if (intersections != null) {
+			const [start, end] = intersections;
+			// :( expensive
+			startAngle = Math.atan2(start.y - center.y, start.x - center.x);
+			endAngle = Math.atan2(end.y - center.y, end.x - center.x);
+		}
+
 		context.beginPath();
 		context.arc(center.x, center.y, circleRadius, startAngle, endAngle);
 		context.stroke();
