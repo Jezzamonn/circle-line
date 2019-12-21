@@ -5,7 +5,7 @@ export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 5;
+		this.period = 10;
 	}
 
 	/**
@@ -24,11 +24,7 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		const numSubShapes = 3;
-		for (let i = 0; i < numSubShapes; i++) {
-			const animAmt = (i + this.animAmt) / numSubShapes;
-			this.renderStrangeShape(context, animAmt);
-		}
+		this.renderStrangeShape(context, this.animAmt);
 	}
 
 	/**
@@ -49,9 +45,9 @@ export default class Controller {
 			y: innerRadius * -lineDirection.x,
 		};
 
-		this.renderLine(context, linePoint, lineDirection);
+		// this.renderLine(context, linePoint, lineDirection);
 
-		const numCircles = 48;
+		const numCircles = 16;
 		for (let i = 0; i < numCircles; i++) {
 			const amt = i / numCircles;
 			this.renderCircleThing(context, 2 * Math.PI * amt, linePoint, lineDirection, );
@@ -104,11 +100,12 @@ export default class Controller {
 			return;
 		}
 		const [start, end] = intersections;
-		context.beginPath();
 		context.lineStyle = 'white';
-		context.moveTo(start.x, start.y);
-		context.lineTo(center.x, center.y);
-		context.lineTo(end.x, end.y);
+		context.beginPath();
+		context.arc(start.x, start.y, 3, 0, 2 * Math.PI);
+		context.stroke();
+		context.beginPath();
+		context.arc(end.x, end.y, 3, 0, 2 * Math.PI);
 		context.stroke();
 	}
 }
