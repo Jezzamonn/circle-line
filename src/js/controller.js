@@ -5,7 +5,7 @@ export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 10;
+		this.period = 5;
 	}
 
 	/**
@@ -24,15 +24,17 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		this.renderStrangeShape(context);
-		context.rotate(Math.PI);
-		this.renderStrangeShape(context);
+		const numSubShapes = 3;
+		for (let i = 0; i < numSubShapes; i++) {
+			const animAmt = (i + this.animAmt) / numSubShapes;
+			this.renderStrangeShape(context, animAmt);
+		}
 	}
 
-	renderStrangeShape(context) {
+	renderStrangeShape(context, animAmt) {
 		context.strokeStyle = 'white';
 		// The line that moves around
-		const lineAngle = 2 * Math.PI * this.animAmt;
+		const lineAngle = 2 * Math.PI * animAmt;
 		const lineDirection = {
 			x: Math.cos(lineAngle),
 			y: Math.sin(lineAngle),
