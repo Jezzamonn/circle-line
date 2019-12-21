@@ -1,5 +1,5 @@
 const outerRadius = 200;
-const innerRadius = 50;
+const innerRadius = 0;
 
 export default class Controller {
 
