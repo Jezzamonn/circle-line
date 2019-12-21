@@ -31,8 +31,13 @@ export default class Controller {
 		}
 	}
 
+	/**
+	 * @param {!CanvasRenderingContext2D} context
+	 */
 	renderStrangeShape(context, animAmt) {
 		context.strokeStyle = 'white';
+		context.lineCap = 'round';
+		context.lineJoin = 'round';
 		// The line that moves around
 		const lineAngle = 2 * Math.PI * animAmt;
 		const lineDirection = {
@@ -46,13 +51,16 @@ export default class Controller {
 
 		this.renderLine(context, linePoint, lineDirection);
 
-		const numCircles = 32;
+		const numCircles = 48;
 		for (let i = 0; i < numCircles; i++) {
 			const amt = i / numCircles;
 			this.renderCircleThing(context, 2 * Math.PI * amt, linePoint, lineDirection, );
 		}
 	}
 
+	/**
+	 * @param {!CanvasRenderingContext2D} context
+	 */
 	renderBoundaryCircles(context) {
 		context.beginPath();
 		context.arc(0, 0, outerRadius, 0, 2 * Math.PI);
