@@ -101,6 +101,10 @@ export default class Controller {
 		if (intersections == null) {
 			return;
 		}
+
+		// 'cause we know line point is in the middle. Otherwise we could tweak line direction but eh
+		const cp = crossProduct(center, linePoint);
+
 		const [end, start] = intersections;
 		// :( expensive
 		const startAngle = Math.atan2(start.y - center.y, start.x - center.x);
@@ -110,12 +114,10 @@ export default class Controller {
 		context.arc(center.x, center.y, circleRadius, startAngle, endAngle);
 		context.stroke();
 
-		context.beginPath();
-		context.arc(start.x, start.y, 3, 0, 2 * Math.PI);
-		context.fill();
+		const point = cp > 0 ? start : end;
 
 		context.beginPath();
-		context.arc(end.x, end.y, 3, 0, 2 * Math.PI);
+		context.arc(point.x, point.y, 3, 0, 2 * Math.PI);
 		context.fill();
 	}
 }
@@ -148,6 +150,11 @@ function scalarMultiply(s, v) {
 
 function dotProduct(v1, v2) {
 	return v1.x * v2.x + v1.y * v2.y;
+}
+
+function crossProduct(v1, v2) {
+	// Just the magnitude / sign as the direction is somewhat meaningless
+	return v1.x * v2.y - v1.y * v2.x;
 }
 
 function addVecs(v1, v2) {
