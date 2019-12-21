@@ -100,12 +100,13 @@ export default class Controller {
 			return;
 		}
 		const [start, end] = intersections;
+
+		// :( expensive
+		const startAngle = Math.atan2(start.y - center.y, start.x - center.x);
+		const endAngle = Math.atan2(end.y - center.y, end.x - center.x);
 		context.lineStyle = 'white';
 		context.beginPath();
-		context.arc(start.x, start.y, 3, 0, 2 * Math.PI);
-		context.stroke();
-		context.beginPath();
-		context.arc(end.x, end.y, 3, 0, 2 * Math.PI);
+		context.arc(center.x, center.y, circleRadius, startAngle, endAngle);
 		context.stroke();
 	}
 }
