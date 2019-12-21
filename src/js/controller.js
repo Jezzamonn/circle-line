@@ -85,21 +85,23 @@ export default class Controller {
 		}
 		const circleRadius = (outerRadius - innerRadius) / 2;
 
-		context.beginPath();
-		context.strokeStyle = 'white';
-		context.arc(center.x, center.y, circleRadius, 0, 2 * Math.PI);
-		context.stroke();
+		// context.beginPath();
+		// context.strokeStyle = 'white';
+		// context.arc(center.x, center.y, circleRadius, 0, 2 * Math.PI);
+		// context.stroke();
 
 		// Also draw the places it crosses over?
 		const intersections = getCircleLineIntersections(center, circleRadius, linePoint, lineDirection);
 		if (intersections == null) {
 			return;
 		}
-		for (const point of intersections) {
-			context.beginPath();
-			context.arc(point.x, point.y, 5, 0, 2 * Math.PI);
-			context.stroke();
-		}
+		const [start, end] = intersections;
+		context.beginPath();
+		context.lineStyle = 'white';
+		context.moveTo(start.x, start.y);
+		context.lineTo(center.x, center.y);
+		context.lineTo(end.x, end.y);
+		context.stroke();
 	}
 }
 
