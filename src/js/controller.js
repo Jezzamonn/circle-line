@@ -1,8 +1,6 @@
 const outerRadius = 200;
 const innerRadius = 75;
 
-const lineHalfLength = Math.sqrt(outerRadius * outerRadius - innerRadius * innerRadius);
-
 export default class Controller {
 
 	constructor() {
@@ -41,34 +39,33 @@ export default class Controller {
 		context.stroke();
 
 		// The line that moves around
-		const angle = 2 * Math.PI * this.animAmt;
+		const lineAngle = 2 * Math.PI * this.animAmt;
+		const lineDirection = {
+			x: Math.cos(lineAngle),
+			y: Math.sin(lineAngle),
+		}
+		const linePoint = {
+			x: innerRadius * lineDirection.y,
+			y: innerRadius * -lineDirection.x,
+		};
 
-		this.renderLine(context, angle);
+		this.renderLine(context, linePoint, lineDirection);
 
 		const numCircles = 16;
 		for (let i = 0; i < numCircles; i++) {
 			const amt = i / numCircles;
-			this.renderCircleThing(context, angle, 2 * Math.PI * amt);
+			this.renderCircleThing(context, 2 * Math.PI * amt, linePoint, lineDirection, );
 		}
 	}
 
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	renderLine(context, angle) {
-		// Old way
-		const lineDirection = {
-			x: Math.cos(angle),
-			y: Math.sin(angle),
-		}
-		const innerVec = {
-			x: innerRadius * lineDirection.y,
-			y: innerRadius * -lineDirection.x,
-		}
+	renderLine(context, linePoint, lineDirection) {
 		const intersections = getCircleLineIntersections(
 			{x: 0, y: 0},
 			outerRadius,
-			innerVec,
+			linePoint,
 			lineDirection);
 		// These should always exist
 		context.beginPath();
@@ -80,7 +77,7 @@ export default class Controller {
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	renderCircleThing(context, lineAngle, circleAngle) {
+	renderCircleThing(context, circleAngle, linePoint, lineDirection) {
 		const centerRadius = (innerRadius + outerRadius) / 2;
 		const center = {
 			x: centerRadius * Math.cos(circleAngle),
@@ -92,6 +89,17 @@ export default class Controller {
 		context.strokeStyle = 'white';
 		context.arc(center.x, center.y, circleRadius, 0, 2 * Math.PI);
 		context.stroke();
+
+		// Also draw the places it crosses over?
+		const intersections = getCircleLineIntersections(center, circleRadius, linePoint, lineDirection);
+		if (intersections == null) {
+			return;
+		}
+		for (const point of intersections) {
+			context.beginPath();
+			context.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+			context.stroke();
+		}
 	}
 }
 
