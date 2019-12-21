@@ -28,16 +28,6 @@ export default class Controller {
 
 		context.strokeStyle = 'white';
 
-		// Two circles for reference
-
-		context.beginPath();
-		context.arc(0, 0, outerRadius, 0, 2 * Math.PI);
-		context.stroke();
-
-		context.beginPath();
-		context.arc(0, 0, innerRadius, 0, 2 * Math.PI);
-		context.stroke();
-
 		// The line that moves around
 		const lineAngle = 2 * Math.PI * this.animAmt;
 		const lineDirection = {
@@ -56,6 +46,16 @@ export default class Controller {
 			const amt = i / numCircles;
 			this.renderCircleThing(context, 2 * Math.PI * amt, linePoint, lineDirection, );
 		}
+	}
+
+	renderBoundaryCircles(context) {
+		context.beginPath();
+		context.arc(0, 0, outerRadius, 0, 2 * Math.PI);
+		context.stroke();
+
+		context.beginPath();
+		context.arc(0, 0, innerRadius, 0, 2 * Math.PI);
+		context.stroke();
 	}
 
 	/**
@@ -84,11 +84,6 @@ export default class Controller {
 			y: centerRadius * Math.sin(circleAngle),
 		}
 		const circleRadius = (outerRadius - innerRadius) / 2;
-
-		// context.beginPath();
-		// context.strokeStyle = 'white';
-		// context.arc(center.x, center.y, circleRadius, 0, 2 * Math.PI);
-		// context.stroke();
 
 		// Also draw the places it crosses over?
 		const intersections = getCircleLineIntersections(center, circleRadius, linePoint, lineDirection);
