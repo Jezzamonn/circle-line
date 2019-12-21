@@ -61,31 +61,16 @@ export default class Controller {
 			x: Math.cos(angle),
 			y: Math.sin(angle),
 		}
-
 		const innerVec = {
 			x: innerRadius * lineDirection.y,
 			y: innerRadius * -lineDirection.x,
 		}
-		const chordVec = {
-			x: lineHalfLength * lineDirection.x,
-			y: lineHalfLength * lineDirection.y,
-		}
-		const start = addVecs(innerVec, chordVec);
-		const end = subVecs(innerVec, chordVec);
-
-		context.beginPath();
-		context.arc(innerVec.x, innerVec.y, 5, 0, 2 * Math.PI);
-		context.stroke();
-		
-		context.beginPath();
-		context.moveTo(start.x, start.y);
-		context.lineTo(end.x, end.y);
-		context.stroke();
-
-		// Nu way
-		const intersections = getCircleLineIntersections({x: 0, y: 0}, outerRadius, innerVec, lineDirection);
+		const intersections = getCircleLineIntersections(
+			{x: 0, y: 0},
+			outerRadius,
+			innerVec,
+			lineDirection);
 		// These should always exist
-		context.strokeStyle = 'red';
 		context.beginPath();
 		context.moveTo(intersections[0].x, intersections[0].y);
 		context.lineTo(intersections[1].x, intersections[1].y);
@@ -110,11 +95,14 @@ export default class Controller {
 	}
 }
 
-function getCircleLineIntersections(circleCenter, circleRadius, lineOrigin, lineDirection) {
-	const originToCenter = subVecs(circleCenter, lineOrigin);
-	const closestPoint = dotProduct(originToCenter, lineDirection);
+function getCircleLineIntersections(circleCenter, circleRadius, linePoint, lineDirection) {
+	// context for debugging
+	const linePointToCenter = subVecs(circleCenter, linePoint);
+	const linePointToClosestPoint = scalarMultiply(dotProduct(linePointToCenter, lineDirection), lineDirection);
+	const closestPoint = addVecs(linePoint, linePointToClosestPoint);
 	const centerToClosest = subVecs(closestPoint, circleCenter);
 	const closestPointDist = magnitude(centerToClosest);
+
 	if (closestPointDist > circleRadius) {
 		// No intersections mate-o!
 		return null;
@@ -134,10 +122,7 @@ function scalarMultiply(s, v) {
 }
 
 function dotProduct(v1, v2) {
-	return {
-		x: v1.x + v2.x,
-		y: v1.y + v2.y,
-	};
+	return v1.x * v2.x + v1.y * v2.y;
 }
 
 function addVecs(v1, v2) {
