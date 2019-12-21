@@ -47,7 +47,7 @@ export default class Controller {
 
 		// this.renderLine(context, linePoint, lineDirection);
 
-		const numCircles = 16;
+		const numCircles = 8;
 		for (let i = 0; i < numCircles; i++) {
 			const amt = i / numCircles;
 			this.renderCircleThing(context, 2 * Math.PI * amt, linePoint, lineDirection, );
@@ -95,20 +95,28 @@ export default class Controller {
 		const circleRadius = (outerRadius - innerRadius) / 2;
 
 		context.lineStyle = 'white';
+		context.fillStyle = 'white';
 		// Also draw the places it crosses over?
-		let startAngle = 0;
-		let endAngle = 2 * Math.PI;
 		const intersections = getCircleLineIntersections(center, circleRadius, linePoint, lineDirection);
-		if (intersections != null) {
-			const [start, end] = intersections;
-			// :( expensive
-			startAngle = Math.atan2(start.y - center.y, start.x - center.x);
-			endAngle = Math.atan2(end.y - center.y, end.x - center.x);
+		if (intersections == null) {
+			return;
 		}
+		const [end, start] = intersections;
+		// :( expensive
+		const startAngle = Math.atan2(start.y - center.y, start.x - center.x);
+		const endAngle = Math.atan2(end.y - center.y, end.x - center.x);
 
 		context.beginPath();
 		context.arc(center.x, center.y, circleRadius, startAngle, endAngle);
 		context.stroke();
+
+		context.beginPath();
+		context.arc(start.x, start.y, 3, 0, 2 * Math.PI);
+		context.fill();
+
+		context.beginPath();
+		context.arc(end.x, end.y, 3, 0, 2 * Math.PI);
+		context.fill();
 	}
 }
 
