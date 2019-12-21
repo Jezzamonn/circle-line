@@ -56,20 +56,39 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	renderLine(context, angle) {
+		// Old way
+		const lineDirection = {
+			x: Math.cos(angle),
+			y: Math.sin(angle),
+		}
+
 		const innerVec = {
-			x: innerRadius * Math.cos(angle),
-			y: innerRadius * Math.sin(angle),
+			x: innerRadius * lineDirection.y,
+			y: innerRadius * -lineDirection.x,
 		}
 		const chordVec = {
-			x: lineHalfLength * Math.sin(angle),
-			y: -lineHalfLength * Math.cos(angle),
+			x: lineHalfLength * lineDirection.x,
+			y: lineHalfLength * lineDirection.y,
 		}
 		const start = addVecs(innerVec, chordVec);
 		const end = subVecs(innerVec, chordVec);
+
+		context.beginPath();
+		context.arc(innerVec.x, innerVec.y, 5, 0, 2 * Math.PI);
+		context.stroke();
 		
 		context.beginPath();
 		context.moveTo(start.x, start.y);
 		context.lineTo(end.x, end.y);
+		context.stroke();
+
+		// Nu way
+		const intersections = getCircleLineIntersections({x: 0, y: 0}, outerRadius, innerVec, lineDirection);
+		// These should always exist
+		context.strokeStyle = 'red';
+		context.beginPath();
+		context.moveTo(intersections[0].x, intersections[0].y);
+		context.lineTo(intersections[1].x, intersections[1].y);
 		context.stroke();
 	}
 
@@ -85,11 +104,34 @@ export default class Controller {
 		const circleRadius = (outerRadius - innerRadius) / 2;
 
 		context.beginPath();
+		context.strokeStyle = 'white';
 		context.arc(center.x, center.y, circleRadius, 0, 2 * Math.PI);
 		context.stroke();
 	}
 }
 
+function getCircleLineIntersections(circleCenter, circleRadius, lineOrigin, lineDirection) {
+	const originToCenter = subVecs(circleCenter, lineOrigin);
+	const closestPoint = dotProduct(originToCenter, lineDirection);
+	const centerToClosest = subVecs(closestPoint, circleCenter);
+	const closestPointDist = magnitude(centerToClosest);
+	if (closestPointDist > circleRadius) {
+		// No intersections mate-o!
+		return null;
+	}
+	const distToIntersection = Math.sqrt(circleRadius * circleRadius - closestPointDist * closestPointDist);
+	return [
+		addVecs(closestPoint, scalarMultiply(distToIntersection, lineDirection)),
+		addVecs(closestPoint, scalarMultiply(-distToIntersection, lineDirection)),
+	];
+}
+
+function scalarMultiply(s, v) {
+	return {
+		x: s * v.x,
+		y: s * v.y,
+	}
+}
 
 function dotProduct(v1, v2) {
 	return {
