@@ -44,6 +44,12 @@ export default class Controller {
 		const angle = 2 * Math.PI * this.animAmt;
 
 		this.renderLine(context, angle);
+
+		const numCircles = 16;
+		for (let i = 0; i < numCircles; i++) {
+			const amt = i / numCircles;
+			this.renderCircleThing(context, angle, 2 * Math.PI * amt);
+		}
 	}
 
 	/**
@@ -64,6 +70,21 @@ export default class Controller {
 		context.beginPath();
 		context.moveTo(start.x, start.y);
 		context.lineTo(end.x, end.y);
+		context.stroke();
+	}
+
+	/**
+	 * @param {!CanvasRenderingContext2D} context
+	 */
+	renderCircleThing(context, lineAngle, circleAngle) {
+		const centerRadius = (innerRadius + outerRadius) / 2;
+		const center = {
+			x: centerRadius * Math.cos(circleAngle),
+			y: centerRadius * Math.sin(circleAngle),
+		}
+
+		context.beginPath();
+		context.arc(center.x, center.y, outerRadius - innerRadius, 0, 2 * Math.PI);
 		context.stroke();
 	}
 }
