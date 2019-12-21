@@ -1,5 +1,5 @@
 const outerRadius = 200;
-const innerRadius = 75;
+const innerRadius = 50;
 
 export default class Controller {
 
@@ -24,10 +24,13 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		context.beginPath();
+		this.renderStrangeShape(context);
+		context.rotate(Math.PI);
+		this.renderStrangeShape(context);
+	}
 
+	renderStrangeShape(context) {
 		context.strokeStyle = 'white';
-
 		// The line that moves around
 		const lineAngle = 2 * Math.PI * this.animAmt;
 		const lineDirection = {
@@ -41,7 +44,7 @@ export default class Controller {
 
 		this.renderLine(context, linePoint, lineDirection);
 
-		const numCircles = 16;
+		const numCircles = 32;
 		for (let i = 0; i < numCircles; i++) {
 			const amt = i / numCircles;
 			this.renderCircleThing(context, 2 * Math.PI * amt, linePoint, lineDirection, );
