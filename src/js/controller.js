@@ -45,7 +45,7 @@ export default class Controller {
 			y: innerRadius * -lineDirection.x,
 		};
 
-		// this.renderLine(context, linePoint, lineDirection);
+		this.renderLine(context, linePoint, lineDirection);
 
 		const numCircles = 8;
 		for (let i = 0; i < numCircles; i++) {
@@ -77,10 +77,12 @@ export default class Controller {
 			linePoint,
 			lineDirection);
 		// These should always exist
+		context.globalAlpha = 0.1;
 		context.beginPath();
 		context.moveTo(intersections[0].x, intersections[0].y);
 		context.lineTo(intersections[1].x, intersections[1].y);
 		context.stroke();
+		context.globalAlpha = 1;
 	}
 
 	/**
